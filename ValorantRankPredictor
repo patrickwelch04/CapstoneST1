@@ -1,0 +1,59 @@
+import tkinter as tk # Imports
+import tkinter.messagebox as messagebox
+
+class RankPredictorGUI: # Beginning of my class
+    def __init__(self, master):
+        self.master = master
+        self.master.title("Valorant Rank Predictor 3000!")
+
+        # Make labels and entry boxes for the users KD ratio
+        self.kd_label = tk.Label(self.master, text="Enter your KD ratio:")
+        self.kd_label.pack()
+        self.kd_entry = tk.Entry(self.master)
+        self.kd_entry.pack()
+
+        # Make labels and entry boxes for the users HS
+        self.hs_label = tk.Label(self.master, text="Enter your headshot percentage:")
+        self.hs_label.pack()
+        self.hs_entry = tk.Entry(self.master)
+        self.hs_entry.pack()
+
+        # Make labels and entry boxes for the users KAST
+        self.kast_label = tk.Label(self.master, text="Enter your average KAST percentage:")
+        self.kast_label.pack()
+        self.kast_entry = tk.Entry(self.master)
+        self.kast_entry.pack()
+
+        # Make Labels to calculate rank
+        self.calc_button = tk.Button(self.master, text="Calculate Rank", command=self.calculate_rank)
+        self.calc_button.pack()
+
+    def calculate_rank(self):
+        # Get users inputs from the box.
+        kd = float(self.kd_entry.get())
+        hs = float(self.hs_entry.get())
+        kast = float(self.kast_entry.get())
+        # Calculates the users valorant rank based off their inputs.
+        if kd >= 1.0 and hs >= 30.0 and kast >= 70.0:
+            rank = "Radiant"
+        elif kd >= 0.9 and hs >= 20.0 and kast >= 60.0:
+            rank = "Immortal"
+        elif kd >= 0.8 and hs >= 20.0 and kast >= 50.0:
+            rank = "Ascendant"
+        elif kd >= 0.7 and hs >= 20.0 and kast >= 45.0:
+            rank = "Diamond"
+        elif kd >= 0.6 and hs >= 15.0 and kast >= 40.0:
+            rank = "Platinum"
+        elif kd >= 0.3 and hs >= 10.0 and kast >= 35.0:
+            rank = "Gold"
+        elif kd >= 0.2 and hs >= 2.0 and kast >= 30.0:
+            rank = "Silver"
+        else:
+            rank = "Bronze"
+        #This displays the users rank prediction based on their inputs to the program.
+        messagebox.showinfo("Valorant Rank Predicter 30000", f"Based on your inputs, your predicted rank is {rank}!")
+
+# Make the Tkinter window and runs the program! :)
+root = tk.Tk()
+app = RankPredictorGUI(root)
+root.mainloop()
