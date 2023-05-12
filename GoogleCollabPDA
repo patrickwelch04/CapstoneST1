@@ -1,0 +1,36 @@
+import pandas as pd
+from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LogisticRegression
+from sklearn.metrics import accuracy_score
+from sklearn.preprocessing import OneHotEncoder
+#Read Data Valorant Champions Istanbul
+data = pd.read_csv("/content/valorant champions istanbul.csv")
+
+# Removes specified column using pandas :)
+data = data.drop("Player", axis=1)
+
+# prize money into numerical  #Read https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.replace.html for regex true
+data["Prize"] = data["Prize"].str.replace(r"\$|,", "", regex=True).astype(float)
+
+# Remove the % symbol so that it turns into numerical or else it breaks
+data["KAST"] = data["KAST"].str.replace("%", "").astype(float)
+
+# hot encoding for thje categories  so that it cna imrpvoe accuracy #https://pandas.pydata.org/docs/reference/api/pandas.get_dummies.html
+category_columns = ["Team", "Nationality", "Role"] #Gets team, nationality and role
+data_encoded = pd.get_dummies(data, columns=category_columns) #
+
+# Split the data into training and testing sets
+X = data_encoded.drop("Rank", axis=1) #Rank
+y = data_encoded["Rank"] #Rank 
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=40) #Test_size means the proportion of data scikit learn will use for testing the valorant data set. Just set to 50% for testing purposes. #Random state makes it so data is split evenly every time. 
+
+# make instance of regression
+model = LogisticRegression()
+model.fit(X_train, y_train) #ranks of players
+
+# predictions for testing the set. It will be the ranks of players based on their features like KAST, role, team etc.
+y_pred = model.predict(X_test)
+
+# Output
+accuracy = accuracy_score(y_test, y_pred) #y_test rank of player, y_pred is prediction. compares.  #accuracy_score is from scikitlearn 
+print("The accuracy of predicting someones valorant rank is:", accuracy) #Higher the number means its confident, lower means its not that confident. 
